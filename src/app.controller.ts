@@ -1,4 +1,5 @@
 import { AppService } from './app.service';
+import { ConfigurationService } from './configuration/configuration.service';
 import { Controller, Get, Param, ParseIntPipe } from '@nestjs/common';
 import { User } from './user/model/user';
 import { UserService } from './user/user.service';
@@ -7,12 +8,18 @@ import { UserService } from './user/user.service';
 export class AppController {
   constructor(
     private appService: AppService,
+    private configService: ConfigurationService,
     private userService: UserService,
   ) {}
 
   @Get('number/:number')
   addTenToGivenNumber(@Param('number', ParseIntPipe) number: number): number {
     return number + 10;
+  }
+
+  @Get('environment')
+  getEnvironment(): string {
+    return this.configService.getValue('environment');
   }
 
   @Get()
